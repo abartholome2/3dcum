@@ -1,6 +1,3 @@
-Meteor.methods({
-});
-
 Meteor.startup(function() {
 });
 

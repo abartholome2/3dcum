@@ -12,7 +12,8 @@ var Router = Backbone.Router.extend({
         page = page?page:"home";
         Session.set('page', page);
         var frag = Meteor.render(function() {
-            var i = Template[page]?Template[page]():Template.notfound();
+            // var i = Template[page]?Template[page]():Template.notfound();
+            var i = Template['base_page']();
             return i;
         });
         document.body.appendChild(frag);
