@@ -19,11 +19,15 @@
 <template name="muzak">
 <div class="span12 abyss">
     <h1 style="text-align:center">Muzask</h1>
+    {{#if livecontent}}
+    {{{livecontent}}}
+    {{else}}
     <table class="table table-bordered table-condensed table-features">
         {{#each features}}
         {{> feature_entry}}
         {{/each}}
     </table>
+    {{/if}}
 </div>
 </template>
 

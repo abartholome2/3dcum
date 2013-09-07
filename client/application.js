@@ -1,23 +1,42 @@
 // startup code here
+var bkg = "images/deer.jpg";
 
 var Router = Backbone.Router.extend({
     routes: {
         ""                : "main",
         ":page"           : "main",
-        "session/:id"     : "session"
+        ":page/:id"       : "content"
     },
 
     main: function(page) {
         document.body.innerHTML = "";
+        document.body.style.backgroundImage = 'url('+bkg+')';
         page = page?page:"home";
         Session.set('page', page);
         var frag = Meteor.render(function() {
-            // var i = Template[page]?Template[page]():Template.notfound();
             var i = Template['base_page']();
             return i;
         });
         document.body.appendChild(frag);
     },
+    content: function(page, id) {
+        document.body.innerHTML = "";
+        document.body.style.backgroundImage = 'url(../'+bkg+')';
+        page = page?page:"home";
+        Session.set('page', page);
+        Meteor.call('fetch_pagecontent', id, function(err, resp) {
+            if (err || !resp) {
+                Session.set('livecontent', null);
+            } else {
+                Session.set('livecontent', resp.html);
+            }
+        });
+        var frag = Meteor.render(function() {
+            var i = Template['base_page']();
+            return i;
+        });
+        document.body.appendChild(frag);
+    }
 });
 
 var app = new Router;

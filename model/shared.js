@@ -5,7 +5,7 @@ Content = function(name) {
 
 Feature = function(name) {
     this.title        = name;
-    this.html         = '';
+    this.pagecontent  = null;
     this.thumbnail    = '*';
     this.content_id   = null;
     this.date_created = null;
@@ -13,8 +13,13 @@ Feature = function(name) {
     this.rating       = 0;
 }
 
+PageContent = function(html) {
+    this.html = '';
+}
+
 Contents = new Meteor.Collection('contents');
 Features = new Meteor.Collection('features');
+PageContents = new Meteor.Collection('pagecontents');
 
 if (Meteor.isServer) {
     Meteor.publish('contents', function() {
@@ -32,7 +37,8 @@ if (Meteor.isServer) {
         var cid = Meteor.call('add_content', mockc);
         for (var i=0; i<5; i++) {
             var mockf   = new Feature('test'+i.toString());
-            mockf.html  = "<h1>gorb " + i.toString() + "</h1>";
+            var html  = "<h1>gorb " + i.toString() + "</h1>";
+            mockf.pagecontent = Meteor.call('add_pagecontent', {'html': html});
             mockf.content_id = cid;
             mockf.rating = i;
             Meteor.call('add_feature', mockf);
@@ -49,6 +55,7 @@ if (Meteor.isClient) {
 
         Meteor.subscribe('contents');
         Meteor.subscribe('features');
+        Meteor.subscribe('pagecontents');
         Meteor.subscribe('userData');
     });
 }
